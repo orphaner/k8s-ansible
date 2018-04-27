@@ -28,7 +28,6 @@
   with_items:
     - "/home/nicolas/.kube/"
     - "/root/.kube/"
-    
   
 - name: Copy admin.conf to Home directory
   copy:
