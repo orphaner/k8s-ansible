@@ -1,8 +1,8 @@
-- name: Reset Kubernetes component
+- name: Kubeadm - Reset
   shell: "kubeadm reset"
   register: reset_cluster
 
-- name: Init Kubernetes cluster
+- name: Kubeadm - Init
   when: reset_cluster is succeeded
   shell: |
     kubeadm init --service-cidr {{ service_cidr }} \
@@ -12,13 +12,17 @@
                  --token {{ token }} \
                  {{ init_opts }}
 
-- name: Enable and restart kubelet engine
+- name: Kubeadm - Enable and restart kubelet engine
   systemd:
     name: kubelet
     daemon_reload: yes
     state: restarted
     enabled: yes
-    
+
+- name: Flannel - Install
+  shell: |
+    kubectl apply -f {{ flannel_yml_url }}
+
 - name: Create .kube directory
   file:
     path: "{{ item }}"
@@ -40,7 +44,3 @@
   with_items:
     - "/home/nicolas/.kube/config"
     - "/root/.kube/config"
-
-- name: install flannel
-  shell: |
-    kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml

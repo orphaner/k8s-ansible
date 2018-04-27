@@ -1,3 +1,10 @@
-init_opts:
 service_cidr: 10.96.0.0/12
+kubernetes_version: 1.10.1
 pod_network_cidr: 10.244.0.0/16
+controller_private_ip: 10.240.0.2
+
+# TODO : get generated token
+token: xgl5bs.4el4ta2mqs1jw2aa
+init_opts:
+
+flannel_yml_url: https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml

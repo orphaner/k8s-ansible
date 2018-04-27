@@ -1,1 +1,2 @@
+kubernetes_version: 1.10.1
 docker_version: 17.03.2~ce-0~ubuntu-xenial
