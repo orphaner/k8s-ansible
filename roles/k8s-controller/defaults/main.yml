@@ -1,0 +1,3 @@
+init_opts:
+service_cidr: 10.96.0.0/12
+pod_network_cidr: 10.244.0.0/16

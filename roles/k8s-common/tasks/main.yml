@@ -1,0 +1,72 @@
+# ansible transposition for https://kubernetes.io/docs/setup/independent/install-kubeadm/ 
+
+- name: Common - Install dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    
+- name: Docker - Add signing key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg 
+    state: present
+    
+- name: Docker - Add repository into sources list.
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu xenial stable
+    state: present
+    update_cache: yes
+    
+- name: Docker - Install docker-ce
+  apt:
+    name: "docker-ce={{ docker_version }}"
+    state: installed
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Kubernetes - Add signing key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+    
+- name: Kubernetes - Add repository into sources list
+  apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    update_cache: yes
+
+- name: Kubernetes - Install base components
+  apt:
+    name: "{{ item }}={{ kubernetes_version }}-00"
+    state: present
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
+  ignore_errors: "{{ ansible_check_mode }}"
+    
+- name: Kubelet - Configure cgroup driver used 
+  replace:
+    dest: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+    regexp: '^cgroup-driver=systemd$'
+    replace: 'cgroup-driver=cgroupfs'
+  register: cgroup_driver_changed
+  ignore_errors: "{{ ansible_check_mode }}"
+
+# TODO - name: disable SWAP
+  
+- name: Kubelet - daemon-reload and restart
+  systemd:
+    name: kubelet 
+    daemon_reload: yes
+    state: restarted
+  when: cgroup_driver_changed.changed
+
+- name: pass bridged IPv4 traffic to iptables
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 1
+    state: present
