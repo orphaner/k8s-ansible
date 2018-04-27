@@ -1,0 +1,7 @@
+# TODO - name: disable SWAP
+
+- name: pass bridged IPv4 traffic to iptables
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 1
+    state: present

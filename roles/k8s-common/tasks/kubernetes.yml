@@ -1,0 +1,35 @@
+- name: Kubernetes - Add signing key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Kubernetes - Add repository into sources list
+  apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    update_cache: yes
+
+- name: Kubernetes - Install base components
+  apt:
+    name: "{{ item }}={{ kubernetes_version }}-00"
+    state: present
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Kubelet - Configure cgroup driver used
+  replace:
+    dest: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+    regexp: '^cgroup-driver=systemd$'
+    replace: 'cgroup-driver=cgroupfs'
+  register: cgroup_driver_changed
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Kubelet - daemon-reload and restart
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    state: restarted
+  when: cgroup_driver_changed.changed
