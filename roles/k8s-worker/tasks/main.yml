@@ -27,9 +27,11 @@
     - dm_mirror
     - dm_thin_pool
   tags: glusterfs
+  when: glusterfs is defined and glusterfs == "1"
 
 - name: GlusterFS - install glusterfs-client package
   apt:
     name: glusterfs-client
     state: present
   tags: glusterfs
+  when: glusterfs is defined and glusterfs == "1"
