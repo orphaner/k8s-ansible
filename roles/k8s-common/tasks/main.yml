@@ -1,7 +1,7 @@
 # ansible transposition for https://kubernetes.io/docs/setup/independent/install-kubeadm/ 
 
 - include_tasks: common.yml
-- include_tasks: system-config.yml
 - include_tasks: docker.yml
 - include_tasks: kubernetes.yml
+- include_tasks: system-config.yml
 

@@ -5,3 +5,4 @@
     name: net.bridge.bridge-nf-call-iptables
     value: 1
     state: present
+  tags: sysctl

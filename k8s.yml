@@ -9,6 +9,9 @@
   become: yes
   roles:
     - k8s-controller
+  vars:
+    # TODO : get generated token
+    token: xgl5bs.4el4ta2mqs1jw2aa
   tags:
     - controller
   
@@ -16,5 +19,8 @@
   become: yes
   roles:
     - k8s-worker
+  vars:
+    # TODO : get generated token
+    token: xgl5bs.4el4ta2mqs1jw2aa
   tags:
     - worker

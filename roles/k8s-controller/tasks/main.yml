@@ -19,10 +19,6 @@
     state: restarted
     enabled: yes
 
-- name: Flannel - Install
-  shell: |
-    kubectl apply -f {{ flannel_yml_url }}
-
 - name: Create .kube directory
   file:
     path: "{{ item }}"
@@ -44,3 +40,8 @@
   with_items:
     - "/home/nicolas/.kube/config"
     - "/root/.kube/config"
+
+- name: Calico - Install
+  shell: |
+    kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
+    kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml

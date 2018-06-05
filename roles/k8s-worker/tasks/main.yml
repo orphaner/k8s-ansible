@@ -17,3 +17,19 @@
     daemon_reload: yes
     state: restarted
     enabled: yes
+
+- name: GlusterFS - load dm_* modules
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - dm_snapshot
+    - dm_mirror
+    - dm_thin_pool
+  tags: glusterfs
+
+- name: GlusterFS - install glusterfs-client package
+  apt:
+    name: glusterfs-client
+    state: present
+  tags: glusterfs

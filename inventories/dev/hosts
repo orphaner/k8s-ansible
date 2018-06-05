@@ -1,6 +1,7 @@
 [controller]
-35.195.162.51
+controller0 ansible_host= ansible_ssh_private_key_file=~/.ssh/google_compute_engine
 
 [worker]
-35.195.34.172
-35.195.79.201
+worker0 ansible_host= ansible_ssh_private_key_file=~/.ssh/google_compute_engine
+worker1 ansible_host= ansible_ssh_private_key_file=~/.ssh/google_compute_engine
+worker2 ansible_host= ansible_ssh_private_key_file=~/.ssh/google_compute_engine

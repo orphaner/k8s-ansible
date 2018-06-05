@@ -1,0 +1,2 @@
+controller_private_ip: 10.240.0.4
+kubernetes_version: 1.10.1
